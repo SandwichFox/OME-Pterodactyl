@@ -11,7 +11,6 @@ WORKDIR /tmp
 ARG     OME_VERSION=master
 ARG 	STRIP=TRUE
 
-USER container
 ENV     PREFIX=/home/container/ovenmediaengine
 ENV     TEMP_DIR=/tmp/ome
 
@@ -49,7 +48,6 @@ RUN \
 FROM	base AS release
 
 WORKDIR         /home/container
-EXPOSE          80/tcp 8080/tcp 8090/tcp 1935/tcp 3333/tcp 3334/tcp 4000-4005/udp 10000-10010/udp 9000/tcp
 COPY            --from=build /home/container/ovenmediaengine /home/container/ovenmediaengine
 
 # Run the entrypoint.sh
