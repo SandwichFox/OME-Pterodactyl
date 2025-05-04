@@ -2,7 +2,7 @@ FROM    ubuntu:22.04 AS base
 
 ## Install libraries by package
 ENV     DEBIAN_FRONTEND=noninteractive
-RUN     apt-get update && apt-get install -y tzdata sudo curl git
+RUN     apt-get update && apt-get install -y tzdata sudo curl git && adduser -D -h /home/container container
 
 FROM    base AS build
 
@@ -11,7 +11,8 @@ WORKDIR /tmp
 ARG     OME_VERSION=master
 ARG 	STRIP=TRUE
 
-ENV     PREFIX=/opt/ovenmediaengine
+USER container
+ENV     PREFIX=/home/container/ovenmediaengine
 ENV     TEMP_DIR=/tmp/ome
 
 ## Download OvenMediaEngine
@@ -47,9 +48,10 @@ RUN \
 
 FROM	base AS release
 
-WORKDIR         /opt/ovenmediaengine/bin
+WORKDIR         /home/container
 EXPOSE          80/tcp 8080/tcp 8090/tcp 1935/tcp 3333/tcp 3334/tcp 4000-4005/udp 10000-10010/udp 9000/tcp
-COPY            --from=build /opt/ovenmediaengine /opt/ovenmediaengine
+COPY            --from=build /home/container/ovenmediaengine /home/container/ovenmediaengine
 
-# Default run as Origin mode
-CMD             ["/opt/ovenmediaengine/bin/OvenMediaEngine", "-c", "origin_conf"]
+# Run the entrypoint.sh
+COPY ./entrypoint.sh /entrypoint.sh
+CMD ["/bin/bash", "/entrypoint.sh"]
