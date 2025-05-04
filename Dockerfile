@@ -19,7 +19,7 @@ ENV     TEMP_DIR=/tmp/ome
 RUN \
         mkdir -p ${TEMP_DIR} && \
         cd ${TEMP_DIR} && \
-        git clone --branch ${OME_VERSION} --single-branch --depth 1 https://github.com/AirenSoft/OvenMediaEngine .
+        git clone --branch ${OME_VERSION} --single-branch --depth 1 https://github.com/SandwichFox/OME-Pterodactyl .
 
 ## Install dependencies
 RUN \
